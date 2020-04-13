@@ -23,7 +23,7 @@
       background-color: transparent !important;
       cursor: pointer;
     }
-    &:active {
+    &.active {
       border-color: $primary-color;
     }
   }
