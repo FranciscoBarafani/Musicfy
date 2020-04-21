@@ -10,3 +10,12 @@ export async function isUserAdmin(uid) {
   //Retorna true si es admin y false si no lo es, lo busca en la coleccion admins
   return response.exists;
 }
+
+export const reauthenticate = (password) => {
+  const user = firebase.auth().currentUser;
+  const credentials = firebase.auth.EmailAuthProvider.credential(
+    user.email,
+    password
+  );
+  return user.reauthenticateAndRetrieveDataWithCredential(credentials);
+};

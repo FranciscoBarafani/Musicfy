@@ -1,15 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Input, Button } from "semantic-ui-react";
 import { toast } from "react-toastify";
 import firebase from "../../utils/Firebase";
 import "firebase/auth";
 
 export default function UserName(props) {
-  const { user, setShowModal, setContentModal, setTitleModal } = props;
+  const {
+    user,
+    setShowModal,
+    setContentModal,
+    setTitleModal,
+    setReloadApp,
+  } = props;
 
   const onEdit = () => {
-    setTitleModal("Actualizar E-mail");
-    setContentModal(<h3>Formulario de Actualizar</h3>);
+    setTitleModal("Actualizar Nombre");
+    setContentModal(
+      <ChangeDisplayNameForm
+        setShowModal={setShowModal}
+        displayName={user.displayName}
+        setReloadApp={setReloadApp}
+      />
+    );
     setShowModal(true);
   };
   return (
@@ -19,5 +31,46 @@ export default function UserName(props) {
         Actualizar
       </Button>
     </div>
+  );
+}
+
+function ChangeDisplayNameForm(props) {
+  const { displayName, setShowModal, setReloadApp } = props;
+  const [formData, setFormData] = useState({ displayName: displayName });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onSubmit = () => {
+    if (!formData.displayName || formData.displayName === displayName) {
+      setShowModal(false);
+    } else {
+      setIsLoading(true);
+      firebase
+        .auth()
+        .currentUser.updateProfile({ displayName: formData.displayName })
+        .then(() => {
+          setReloadApp((prevState) => !prevState);
+          toast.success("Nombre actualizado");
+          setIsLoading(false);
+          setShowModal(false);
+        })
+        .catch(() => {
+          toast.error("Error al actualizar el nombre");
+          setIsLoading(false);
+        });
+    }
+  };
+
+  return (
+    <Form onSubmit={onSubmit}>
+      <Form.Field>
+        <Input
+          defaultValue={displayName}
+          onChange={(e) => setFormData({ displayName: e.target.value })}
+        />
+      </Form.Field>
+      <Button type="submit" loading={isLoading}>
+        Actualizar Nombre
+      </Button>
+    </Form>
   );
 }

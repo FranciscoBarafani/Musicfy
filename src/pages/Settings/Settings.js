@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import UploadAvatar from "../../components/Settings/UploadAvatar";
 import UserName from "../../components/Settings/UserName";
 import BasicModal from "../../components/Modal/BasicModal";
+import UserEmail from "../../components/Settings/UserEmail";
 
 import "./Settings.scss";
 
@@ -21,8 +22,15 @@ export default function Settings(props) {
           setShowModal={setShowModal}
           setTitleModal={setTitleModal}
           setContentModal={setContentModal}
+          setReloadApp={setReloadApp}
         />
       </div>
+      <UserEmail
+        user={user}
+        setShowModal={setShowModal}
+        setTitleModal={setTitleModal}
+        setContentModal={setContentModal}
+      />
       <BasicModal show={showModal} setShow={setShowModal} title={titleModal}>
         {contentModal}
       </BasicModal>
