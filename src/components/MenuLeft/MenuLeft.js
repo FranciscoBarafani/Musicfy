@@ -4,6 +4,7 @@ import { Menu, Icon } from "semantic-ui-react";
 import { Link, withRouter } from "react-router-dom";
 import { isUserAdmin } from "../../utils/Api";
 import BasicModal from "../Modal/BasicModal";
+import AddArtistForm from "../Artists/AddArtistForm";
 
 function MenuLeft(props) {
   const { user, location } = props;
@@ -25,7 +26,7 @@ function MenuLeft(props) {
     switch (type) {
       case "artist":
         setTitleModal("Nuevo Artista");
-        setContentModal(<h2>Formulario nuevo artista</h2>);
+        setContentModal(<AddArtistForm setShowModal={setShowModal} />);
         setShowModal(true);
         break;
       case "song":
