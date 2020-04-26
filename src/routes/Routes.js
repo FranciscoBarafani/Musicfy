@@ -2,6 +2,7 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 
 import Settings from "../pages/Settings";
+import Home from "../pages/Home";
 
 //Pages
 
@@ -11,7 +12,7 @@ export default function Routes(props) {
   return (
     <Switch>
       <Route path="/" exact>
-        <h1>Home</h1>
+        <Home />
       </Route>
       <Route path="/artist" exact>
         <h1>Artist</h1>

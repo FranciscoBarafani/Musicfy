@@ -44,7 +44,7 @@ export default function UploadAvatar(props) {
         await firebase.auth().currentUser.updateProfile({ photoURL: response });
         setReloadApp((prevState) => !prevState);
       })
-      .catch(toast.error("Error al actualizar avatar"));
+      .catch(() => toast.error("Error al actualizar avatar"));
   };
 
   return (

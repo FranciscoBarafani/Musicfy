@@ -3,38 +3,104 @@ import "./AddArtistForm.scss";
 import { Form, Input, Button, Image } from "semantic-ui-react";
 import { useDropzone } from "react-dropzone";
 import NoImage from "../../../assets/png/no-image.png";
+import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
+import firebase from "../../../utils/Firebase";
+import "firebase/storage";
+import "firebase/firestore";
+
+const db = firebase.firestore(firebase);
 
 export default function AddArtistForm(props) {
   const { setShowModal } = props;
+  const [formData, setFormData] = useState(initialValueForm);
+  const [isLoading, setIsLoading] = useState(false);
   const [banner, setBanner] = useState(null);
   const [file, setFile] = useState(null);
 
   const onDrop = useCallback((acceptedFile) => {
-    console.log(acceptedFile);
+    const file = acceptedFile[0];
+    setFile(file);
+    setBanner(URL.createObjectURL(file));
   });
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept: "image/jpg,image/png",
+    accept: "image/jpeg, image/png",
     noKeyboard: true,
     onDrop,
   });
 
-  const onSubmit = () => {
-    setShowModal(false);
+  const uploadImage = (fileName) => {
+    const ref = firebase.storage().ref().child(`artist/${fileName}`);
+    return ref.put(file);
   };
+
+  const onSubmit = () => {
+    if (!formData) {
+      toast.warn("Añade el nombre del artista.");
+    } else if (!file) {
+      toast.warn("Añade la imagen del artista");
+    } else {
+      setIsLoading(true);
+      const fileName = uuidv4();
+      uploadImage(fileName)
+        .then(() => {
+          db.collection("artists")
+            .add({ name: formData.name, banner: fileName })
+            .then(() => {
+              toast.success("Artista creado correctamente.");
+              resetForm();
+              setIsLoading(false);
+              setShowModal(false);
+            })
+            .catch(() => {
+              toast.error("Error al crear artista.");
+              setIsLoading(false);
+            });
+        })
+        .catch(() => toast.error("Error al subir imagen."));
+    }
+  };
+
+  const resetForm = () => {
+    setFormData(initialValueForm());
+    setFile(null);
+    setBanner(null);
+  };
+
   return (
     <Form className="add-artist-form" onSubmit={onSubmit}>
       <Form.Field className="artist-banner">
-        <div {...getRootProps()} className="banner" />
-        <input {...getInputProps()} />
+        <div
+          {...getRootProps()}
+          className="banner"
+          style={{ backgroundImage: `url('${banner}')` }}
+        >
+          <input {...getInputProps()} />{" "}
+        </div>
+        {!banner && <img src={NoImage} />}
       </Form.Field>
       <Form.Field className="artist-avatar">
-        <div>Avatar</div>
+        <div
+          className="avatar"
+          style={{ backgroundImage: `url('${banner ? banner : NoImage}')` }}
+        />
       </Form.Field>
       <Form.Field>
-        <Input placeholder="Nombre del artista" />
+        <Input
+          placeholder="Nombre del artista"
+          onChange={(e) => setFormData({ name: e.target.value })}
+        />
       </Form.Field>
-      <Button type="submit">Crear artista</Button>
+      <Button type="submit" loading={isLoading}>
+        Crear artista
+      </Button>
     </Form>
   );
+}
+
+function initialValueForm() {
+  return {
+    name: "",
+  };
 }
