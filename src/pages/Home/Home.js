@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Home.scss";
 import BannerHome from "../../components/BannerHome";
+import BasicSliderItems from "../../components/Sliders/BasicSliderItems";
 import firebase from "../../utils/Firebase";
 import "firebase/firestore";
 import { map } from "lodash";
@@ -26,6 +27,7 @@ export default function Home() {
     <>
       <BannerHome />
       <div className="home">
+        <BasicSliderItems title="Ultimos Artistas" data={artists} />
         <h1>Mas</h1>
       </div>
     </>
