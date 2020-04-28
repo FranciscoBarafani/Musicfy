@@ -27,7 +27,12 @@ export default function Home() {
     <>
       <BannerHome />
       <div className="home">
-        <BasicSliderItems title="Ultimos Artistas" data={artists} />
+        <BasicSliderItems
+          title="Ultimos Artistas"
+          data={artists}
+          folderImage="artist"
+          urlName="artist"
+        />
         <h1>Mas</h1>
       </div>
     </>
