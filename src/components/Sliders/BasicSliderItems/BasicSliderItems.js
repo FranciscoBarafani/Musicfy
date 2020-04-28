@@ -1,9 +1,12 @@
-import React from "react";
-import "./BasicSliderItems";
+import React, { useState, useEffect } from "react";
+import "./BasicSliderItems.scss";
 import Slider from "react-slick";
+import { map } from "lodash";
+import firebase from "../../../utils/Firebase";
+import "firebase/storage";
 
 export default function BasicSliderItems(props) {
-  const { artists, title } = props;
+  const { data, title } = props;
   const settings = {
     dots: false,
     infinite: true,
@@ -18,25 +21,35 @@ export default function BasicSliderItems(props) {
     <div className="basic-slider-items">
       <h2>{title}</h2>
       <Slider {...settings}>
-        <div>
-          <h3>1</h3>
-        </div>
-        <div>
-          <h3>2</h3>
-        </div>
-        <div>
-          <h3>3</h3>
-        </div>
-        <div>
-          <h3>4</h3>
-        </div>
-        <div>
-          <h3>5</h3>
-        </div>
-        <div>
-          <h3>6</h3>
-        </div>
+        {map(data, (item) => (
+          <RenderItem key={item.id} item={item} />
+        ))}
       </Slider>
+    </div>
+  );
+}
+
+function RenderItem(props) {
+  const { item } = props;
+  const [imageUrl, setImageUrl] = useState(null);
+
+  useEffect(() => {
+    firebase
+      .storage()
+      .ref(`artist/${item.banner}`)
+      .getDownloadURL()
+      .then((url) => {
+        setImageUrl(url);
+      });
+  }, [item]);
+
+  return (
+    <div className="basic-slider-items__list-item">
+      <div
+        className="avatar"
+        style={{ backgroundImage: `url('${imageUrl}')` }}
+      />
+      <h3>{item.name}</h3>
     </div>
   );
 }
