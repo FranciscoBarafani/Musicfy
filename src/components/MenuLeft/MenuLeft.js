@@ -5,6 +5,7 @@ import { Link, withRouter } from "react-router-dom";
 import { isUserAdmin } from "../../utils/Api";
 import BasicModal from "../Modal/BasicModal";
 import AddArtistForm from "../Artists/AddArtistForm";
+import AddAlbumForm from "../AddAlbumForm";
 
 function MenuLeft(props) {
   const { user, location } = props;
@@ -27,6 +28,11 @@ function MenuLeft(props) {
       case "artist":
         setTitleModal("Nuevo Artista");
         setContentModal(<AddArtistForm setShowModal={setShowModal} />);
+        setShowModal(true);
+        break;
+      case "album":
+        setTitleModal("Nuevo Album");
+        setContentModal(<AddAlbumForm setShowModal={setShowModal} />);
         setShowModal(true);
         break;
       case "song":
@@ -77,6 +83,10 @@ function MenuLeft(props) {
             <Menu.Item onClick={() => handlerModal("artist")}>
               <Icon name="plus square outline" />
               Nuevo Artista
+            </Menu.Item>
+            <Menu.Item onClick={() => handlerModal("album")}>
+              <Icon name="plus square outline" />
+              Nuevo Album
             </Menu.Item>
             <Menu.Item onClick={() => handlerModal("song")}>
               <Icon name="plus square outline" />

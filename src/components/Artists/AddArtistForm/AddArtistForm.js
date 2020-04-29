@@ -22,7 +22,7 @@ export default function AddArtistForm(props) {
     const file = acceptedFile[0];
     setFile(file);
     setBanner(URL.createObjectURL(file));
-  });
+  }, []);
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: "image/jpeg, image/png",
@@ -76,7 +76,7 @@ export default function AddArtistForm(props) {
           className="banner"
           style={{ backgroundImage: `url('${banner}')` }}
         >
-          <input {...getInputProps()} />{" "}
+          <input {...getInputProps()} />
         </div>
         {!banner && <img src={NoImage} />}
       </Form.Field>
