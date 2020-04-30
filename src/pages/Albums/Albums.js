@@ -17,7 +17,6 @@ export default function Albums() {
     db.collection("album")
       .get()
       .then((response) => {
-        console.log(response.d);
         const arrayAlbums = [];
         map(response?.docs, (album) => {
           const data = album.data();
@@ -56,7 +55,7 @@ function Album(props) {
   }, [album]);
 
   return (
-    <Link to={"/album/${album.id}"}>
+    <Link to={`/album/${album.id}`}>
       <div className="albums__item">
         <div
           className="avatar"
