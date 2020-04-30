@@ -5,8 +5,10 @@ import { useDropzone } from "react-dropzone";
 import NoImage from "../../assets/png/no-image.png";
 import firebase from "../../utils/Firebase";
 import "firebase/firestore";
+import "firebase/storage";
 import { map } from "lodash";
 import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
 
 const db = firebase.firestore(firebase);
 
@@ -35,14 +37,19 @@ export default function AddAlbumForm(props) {
       });
   }, []);
 
-  const onDrop = useCallback((acceptedFiles) => {
-    const file = acceptedFiles[0];
+  const uploadImage = (fileName) => {
+    const ref = firebase.storage().ref().child(`album/${fileName}`);
+    return ref.put(file);
+  };
+  //
+  const onDrop = useCallback((acceptedFile) => {
+    const file = acceptedFile[0];
     setFile(file);
     setAlbumImage(URL.createObjectURL(file));
   }, []);
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept: "image/jpg, image/png",
+    accept: "image/jpeg, image/png",
     noKeyboard: true,
     onDrop,
   });
@@ -53,8 +60,38 @@ export default function AddAlbumForm(props) {
     } else if (!file) {
       toast.warn("La imagen del album es obligatoria");
     } else {
-      console.log("creando album");
+      setIsLoading(true);
+      const fileName = uuidv4();
+      uploadImage(fileName)
+        .then(() => {
+          db.collection("album")
+            .add({
+              name: formData.name,
+              artist: formData.artist,
+              banner: fileName,
+            })
+            .then(() => {
+              toast.success("Album creado correctamente.");
+              resetForm();
+              setIsLoading(false);
+              setShowModal(false);
+            })
+            .catch(() => {
+              toast.warn("Error al crear album.");
+              setIsLoading(false);
+            });
+        })
+        .catch(() => {
+          toast.warn("Error al subir imagen, intente nuevamente.");
+          setIsLoading(false);
+        });
     }
+  };
+
+  const resetForm = () => {
+    setformData(initialValueForm());
+    setFile(null);
+    setAlbumImage(null);
   };
 
   return (
@@ -82,7 +119,7 @@ export default function AddAlbumForm(props) {
             options={artists}
             lazyLoad
             onChange={(e, data) =>
-              setformData({ ...formData, name: data.value })
+              setformData({ ...formData, artist: data.value })
             }
           />
         </Form.Field>

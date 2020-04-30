@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./BasicSliderItems.scss";
 import Slider from "react-slick";
 import { Link } from "react-router-dom";
-import { map } from "lodash";
+import { map, size } from "lodash";
 import firebase from "../../../utils/Firebase";
 import "firebase/storage";
 
@@ -17,6 +17,11 @@ export default function BasicSliderItems(props) {
     centerMode: true,
     className: "basic-slider-items__list",
   };
+
+  //Checks if array is longer than five to render it.
+  if (size(data) < 5) {
+    return null;
+  }
 
   return (
     <div className="basic-slider-items">
