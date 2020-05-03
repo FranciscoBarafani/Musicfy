@@ -5,14 +5,13 @@ import { Grid, Progress, Icon, Input, Image } from "semantic-ui-react";
 
 export default function Player(props) {
   const { songData } = props;
-  console.log(songData);
   const [playedSeconds, setplayedSeconds] = useState(0);
   const [totalSeconds, setTotalSeconds] = useState(0);
   const [volume, setVolume] = useState(0.3);
   const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
-    if (songData.url) {
+    if (songData?.url) {
       onStart();
     }
   }, [songData]);
