@@ -65,9 +65,9 @@ export default function AddSongForm(props) {
     } else {
       setIsLoading(true);
       const fileName = uuidv4();
-      console.log(fileName);
-      uploadSong(fileName)
-        .then(() => {
+      uploadSong("prueba")
+        .then((response) => {
+          console.log(response);
           db.collection("songs")
             .add({
               name: formData.name,
@@ -85,7 +85,8 @@ export default function AddSongForm(props) {
               setIsLoading(false);
             });
         })
-        .catch(() => {
+        .catch((response) => {
+          console.log(response);
           toast.error("Error al subir la canción.");
           setIsLoading(false);
         });
