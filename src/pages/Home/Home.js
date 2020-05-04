@@ -31,12 +31,12 @@ export default function Home() {
 
   //Albums Get
   useEffect(() => {
-    db.collection("albums")
+    db.collection("album")
       .get()
       .then((response) => {
         const arrayAlbums = [];
         map(response?.docs, (album) => {
-          const data = album.data;
+          const data = album.data();
           data.id = album.id;
           arrayAlbums.push(data);
         });

@@ -5,6 +5,15 @@
   min-height: 100vh;
   margin: 0;
 
+  .content {
+    overflow: scroll;
+    height: calc(100vh - 105px);
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
   > .row {
     padding: 0;
 
@@ -17,14 +26,6 @@
 
     > .column {
       padding: 0;
-      .content {
-        overflow: scroll;
-        height: calc(100vh - 105px);
-
-        &::-webkit-scrollbar {
-          display: none;
-        }
-      }
     }
   }
 }
