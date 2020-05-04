@@ -18,11 +18,6 @@ export default function BasicSliderItems(props) {
     className: "basic-slider-items__list",
   };
 
-  //Checks if array is longer than five to render it.
-  if (size(data) < 5) {
-    return null;
-  }
-
   return (
     <div className="basic-slider-items">
       <h2>{title}</h2>

@@ -9,7 +9,12 @@ let mainWindow;
 
 //Esta funcion crea la ventana de nuestra app
 function createWindow() {
-  mainWindow = new BrowserWindow({ width: 900, height: 680 });
+  mainWindow = new BrowserWindow({
+    width: 1500,
+    height: 1000,
+    title: "Musicfy",
+    titleBarStyle: "hiddenInset",
+  });
   mainWindow.loadURL(
     isDev
       ? "http://localhost:3000"

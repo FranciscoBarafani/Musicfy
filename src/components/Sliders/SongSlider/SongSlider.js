@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Icon } from "semantic-ui-react";
 import Slider from "react-slick";
-import { map, size } from "lodash";
+import { map } from "lodash";
 import { Link } from "react-router-dom";
 import firebase from "../../../utils/Firebase";
 import "firebase/firestore";
@@ -15,18 +15,14 @@ export default function SongsSlider(props) {
   const { title, data, playerSong } = props;
 
   const settings = {
-    dats: false,
+    dots: false,
     infiniti: true,
     speed: 500,
     slidesToShow: 5,
-    slidesToScroll: 4,
+    slidesToScroll: 1,
     centerMode: true,
     className: "song-slider__list",
   };
-
-  if (size(data) < 5) {
-    return null;
-  }
 
   return (
     <div className="song-slider">

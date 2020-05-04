@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import "./BannerArtist.scss";
 import firebase from "../../../utils/Firebase";
 import "firebase/storage";
+
+import "./BannerArtist.scss";
 
 export default function BannerArtist(props) {
   const { artist } = props;

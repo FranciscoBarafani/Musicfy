@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import "./BannerHome.scss";
 import firebase from "../../utils/Firebase";
 import "firebase/storage";
+
+import "./BannerHome.scss";
 
 export default function BannerHome() {
   const [bannerUrl, setBannerUrl] = useState(null);

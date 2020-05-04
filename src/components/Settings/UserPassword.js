@@ -7,7 +7,7 @@ import firebase from "../../utils/Firebase";
 import "firebase/auth";
 
 export default function UserPassword(props) {
-  const { setShowModal, setTitleModal, setContentModal, user } = props;
+  const { setShowModal, setTitleModal, setContentModal } = props;
 
   const onEdit = () => {
     setTitleModal("Actualizar contraseña");

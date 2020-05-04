@@ -9,7 +9,8 @@ import { map } from "lodash";
 
 const db = firebase.firestore(firebase);
 
-export default function Home() {
+export default function Home(props) {
+  const { playerSong } = props;
   const [artists, setArtists] = useState([]);
   const [albums, setAlbums] = useState([]);
   const [songs, setSongs] = useState([]);
@@ -76,7 +77,11 @@ export default function Home() {
           folderImage="album"
           urlName="album"
         />
-        <SongSlider title={"Ultimas canciones"} data={songs} />
+        <SongSlider
+          title={"Ultimas canciones"}
+          data={songs}
+          playerSong={playerSong}
+        />
       </div>
     </>
   );

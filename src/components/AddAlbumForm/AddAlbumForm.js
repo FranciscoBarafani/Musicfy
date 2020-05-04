@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-import "./AddAlbumForm.scss";
 import { Form, Input, Button, Image, Dropdown } from "semantic-ui-react";
 import { useDropzone } from "react-dropzone";
 import NoImage from "../../assets/png/no-image.png";
@@ -9,6 +8,8 @@ import "firebase/storage";
 import { map } from "lodash";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
+
+import "./AddAlbumForm.scss";
 
 const db = firebase.firestore(firebase);
 
@@ -20,6 +21,7 @@ export default function AddAlbumForm(props) {
   const [formData, setformData] = useState(initialValueForm());
   const [isLoading, setIsLoading] = useState(false);
 
+  //Get Artists
   useEffect(() => {
     db.collection("artists")
       .get()
@@ -37,11 +39,12 @@ export default function AddAlbumForm(props) {
       });
   }, []);
 
+  //Upload Image
   const uploadImage = (fileName) => {
     const ref = firebase.storage().ref().child(`album/${fileName}`);
     return ref.put(file);
   };
-  //
+
   const onDrop = useCallback((acceptedFile) => {
     const file = acceptedFile[0];
     setFile(file);

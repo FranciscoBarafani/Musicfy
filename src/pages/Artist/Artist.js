@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
-import "./Artist.scss";
 import { withRouter } from "react-router-dom";
 import firebase from "../../utils/Firebase";
 import BannerArtist from "../../components/Artists/BannerArtist";
 import "firebase/firestore";
 import { map } from "lodash";
 import BasicSliderItems from "../../components/Sliders/BasicSliderItems";
+import SongSlider from "../../components/Sliders/SongSlider";
+
+import "./Artist.scss";
 
 const db = firebase.firestore(firebase);
 
 export function Artist(props) {
-  const { match } = props;
+  const { match, playerSong } = props;
   const [artist, setArtist] = useState(null);
   const [albums, setAlbums] = useState([]);
+  const [songs, setSongs] = useState([]);
 
   useEffect(() => {
     db.collection("artists")
@@ -28,20 +31,42 @@ export function Artist(props) {
 
   useEffect(() => {
     if (artist) {
-      db.collection("albums")
+      db.collection("album")
         .where("artist", "==", artist.id)
         .get()
         .then((response) => {
           const arrayAlbums = [];
           map(response?.docs, (album) => {
-            const data = response.data();
-            data.id = response.id;
+            const data = album.data();
+            data.id = album.id;
             arrayAlbums.push(data);
           });
           setAlbums(arrayAlbums);
         });
     }
-  }, []);
+  }, [artist]);
+
+  useEffect(() => {
+    const arraySongs = [];
+    (async () => {
+      await Promise.all(
+        map(albums, async (album) => {
+          await db
+            .collection("songs")
+            .where("album", "==", album.id)
+            .get()
+            .then((response) => {
+              map(response?.docs, (song) => {
+                const data = song.data();
+                data.id = song.id;
+                arraySongs.push(data);
+              });
+            });
+        })
+      );
+      setSongs(arraySongs);
+    })();
+  }, [albums]);
 
   return (
     <div className="artist">
@@ -53,6 +78,7 @@ export function Artist(props) {
           folderImage="album"
           urlName="album"
         />
+        <SongSlider title="Canciones" data={songs} playerSong={playerSong} />
       </div>
     </div>
   );

@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from "react";
-import "./AddArtistForm.scss";
-import { Form, Input, Button, Image } from "semantic-ui-react";
+import { Form, Input, Button } from "semantic-ui-react";
 import { useDropzone } from "react-dropzone";
 import NoImage from "../../../assets/png/no-image.png";
 import { toast } from "react-toastify";
@@ -8,6 +7,8 @@ import { v4 as uuidv4 } from "uuid";
 import firebase from "../../../utils/Firebase";
 import "firebase/storage";
 import "firebase/firestore";
+
+import "./AddArtistForm.scss";
 
 const db = firebase.firestore(firebase);
 
