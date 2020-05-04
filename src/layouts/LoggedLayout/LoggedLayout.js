@@ -15,18 +15,11 @@ export default function LoggedLayout(props) {
   const [songData, setSongData] = useState(null);
 
   const playerSong = (albumImage, songName, songNameFile) => {
-    console.log(albumImage);
-    console.log(songName);
-    console.log(songNameFile);
-
     firebase
       .storage()
       .ref(`song/${songNameFile}`)
       .getDownloadURL()
       .then((url) => {
-        console.log(url);
-        console.log(albumImage);
-        console.log(songName);
         setSongData({ url, image: albumImage, name: songName });
       });
   };
